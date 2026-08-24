@@ -86,4 +86,8 @@ El workflow publica dos assets en cada release:
 - `<name>-<version>.vsix` (versionado)
 - `devbuddy-vscode-latest.vsix` (estable para descarga de ultima version)
 
+URL de releases:
+- https://github.com/sroncall/devbuddy-vscode/releases/latest/download/devbuddy-vscode-latest.vsix
+
+
 Tambien se puede ejecutar manualmente desde Actions (`workflow_dispatch`) indicando el `tag`.
