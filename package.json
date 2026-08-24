@@ -99,7 +99,10 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package:vsix": "tsc -p ./ && npx @vscode/vsce package --allow-missing-repository"
+    "package:vsix": "tsc -p ./ && npx @vscode/vsce package --allow-missing-repository",
+    "release:patch": "npm version patch -m \"chore(release): v%s\" && git push origin main --follow-tags",
+    "release:minor": "npm version minor -m \"chore(release): v%s\" && git push origin main --follow-tags",
+    "release:major": "npm version major -m \"chore(release): v%s\" && git push origin main --follow-tags"
   },
   "devDependencies": {
     "@types/node": "^20.16.5",

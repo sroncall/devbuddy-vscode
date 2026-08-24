@@ -5,11 +5,14 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag to publish (example: v0.0.2)'
+        required: true
+        type: string
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   build-and-publish:
@@ -42,26 +45,17 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "file=$file" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare Pages content
+      - name: Prepare stable release asset
         shell: bash
         run: |
-          mkdir -p public
-          cp "${{ steps.meta.outputs.file }}" public/devbuddy-vscode-latest.vsix
+          mkdir -p artifacts
+          cp "${{ steps.meta.outputs.file }}" artifacts/devbuddy-vscode-latest.vsix
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: |
             ${{ steps.meta.outputs.file }}
-            public/devbuddy-vscode-latest.vsix
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-
-      - name: Deploy GitHub Pages
-        uses: actions/deploy-pages@v4
+            artifacts/devbuddy-vscode-latest.vsix

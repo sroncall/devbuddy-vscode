@@ -61,3 +61,29 @@ npm run package:vsix
 ```
 
 Eso genera el paquete instalable de la extension en la raiz del proyecto.
+
+## Release automatizado
+
+Este repositorio publica releases en GitHub Actions usando tags `v*`.
+
+Scripts recomendados:
+
+```bash
+npm run release:patch
+npm run release:minor
+npm run release:major
+```
+
+Cada script hace lo siguiente:
+
+- Incrementa version en `package.json`.
+- Crea commit de release.
+- Crea tag `vX.Y.Z`.
+- Hace push de `main` y del tag.
+
+El workflow publica dos assets en cada release:
+
+- `<name>-<version>.vsix` (versionado)
+- `devbuddy-vscode-latest.vsix` (estable para descarga de ultima version)
+
+Tambien se puede ejecutar manualmente desde Actions (`workflow_dispatch`) indicando el `tag`.
