@@ -2,7 +2,7 @@
   "name": "dev-buddy",
   "displayName": "DevBuddy",
   "description": "Herramientas de productividad para DevOps en VS Code: YAML para .helm y gestion de comandos personalizados.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "UNLICENSED",
   "publisher": "local-dev",
   "engines": {
