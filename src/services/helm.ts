@@ -61,7 +61,7 @@ export async function createHelmYaml(resource?: vscode.Uri): Promise<void> {
       }
     }
 
-    const yamlTemplate = await buildHelmYamlTemplate(gitCwd);
+    const yamlTemplate = await buildHelmYamlTemplate(gitCwd, branchName);
     await fs.writeFile(filePath, yamlTemplate, 'utf8');
 
     const doc = await vscode.workspace.openTextDocument(filePath);
@@ -118,11 +118,17 @@ function sanitizeBranchName(branch: string): string {
     .replace(/^-|-$/g, '');
 }
 
-async function buildHelmYamlTemplate(workspaceRoot: string): Promise<string> {
+async function buildHelmYamlTemplate(workspaceRoot: string, branchName: string): Promise<string> {
   const examplePath = path.join(workspaceRoot, 'custom-environment.yaml.example');
 
   if (await exists(examplePath)) {
-    return fs.readFile(examplePath, 'utf8');
+    const template = await fs.readFile(examplePath, 'utf8');
+    const wrapperBaseUrl = `https://fluxor-wrapper-${branchName}.stg.emerios.com`;
+
+    return template.replace(
+      /^(\s*WRAPPER_SERVER_BASE_URL\s*:\s*).*(\r?)$/gm,
+      `$1${wrapperBaseUrl}$2`
+    );
   }
 
   return ['# Archivo generado automaticamente por DevBuddy', ''].join('\n');
